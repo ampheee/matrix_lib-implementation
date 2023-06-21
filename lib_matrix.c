@@ -17,7 +17,7 @@ int lib_create_matrix(int rows, int columns, matrix_t *result) {
     return res;
 }
 int lib_eq_matrix(matrix_t *A, matrix_t *B) {
-    int res = OK;
+    int res = SUCCESS;
     if (!isIncorrect(A) && !isIncorrect(B)) {
         if (A->columns == B->columns && A->rows == B->rows) {
             for (int i = 0; i < A->rows; i++) {
@@ -64,7 +64,7 @@ int lib_sub_matrix(matrix_t *A, matrix_t *B, matrix_t *result) {
             if (res == OK) {
                 for (int i = 0; i < A->rows; i++) {
                     for (int j = 0; j < A->columns; j++) {
-                        result->matrix[i][j] = A->matrix[i][j] + B->matrix[i][j];
+                        result->matrix[i][j] = A->matrix[i][j] - B->matrix[i][j];
                     }
                 }
             }
@@ -101,7 +101,7 @@ int lib_mult_matrix(matrix_t *A, matrix_t *B, matrix_t *result) {
             if (res == OK) {
                 for (int i = 0; i < A->rows; i++) {
                     for (int j = 0; j < B->columns; j++) {
-                        int sum = 0;
+                        double sum = 0;
                         for (int k = 0; k < A->columns; k++) {
                             sum += A->matrix[i][k] * B->matrix[k][j];
                         }
@@ -123,8 +123,8 @@ int lib_transpose(matrix_t *A, matrix_t *result) {
     if (!isIncorrect(A)) {
         res = lib_create_matrix(A->columns, A->rows, result);
         if (res == OK) {
-            for (int i = 0; i < A->columns; i++) {
-                for (int j = 0; j < A->rows; j++) {
+            for (int i = 0; i < A->rows; i++) {
+                for (int j = 0; j < A->columns; j++) {
                     result->matrix[j][i] = A->matrix[i][j];
                 }
             }
@@ -136,7 +136,7 @@ int lib_transpose(matrix_t *A, matrix_t *result) {
 }
 int lib_calc_complements(matrix_t *A, matrix_t *result) {
     int res = OK;
-    if (!isIncorrect(A)) {
+    if (!isIncorrect(A) && isIncorrect(result)) {
         res = lib_create_matrix(A->rows, A->columns, result);
         if (res == OK) {
             for (int i = 0; i < A->columns; i++) {

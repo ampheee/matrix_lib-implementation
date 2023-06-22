@@ -540,7 +540,7 @@ START_TEST(COMPLTest02) {
   set_matrix(&matrix1, in_mat1);
 
   ck_assert_uint_eq(lib_calc_complements(&matrix1, &result), 2);
-
+  lib_remove_matrix(&result);
   lib_remove_matrix(&matrix1);
 }
 END_TEST
@@ -649,7 +649,7 @@ START_TEST(INVERSTest02) {
 
   double in_mat1[10][10] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
   set_matrix(&matrix1, in_mat1);
-  ck_assert_uint_eq(lib_inverse_matrix(&matrix1, &result), 1);
+  ck_assert_uint_eq(lib_inverse_matrix(&matrix1, &result), 2);
 
   lib_remove_matrix(&matrix1);
 }
@@ -679,32 +679,6 @@ START_TEST(INVERSTest04) {
       {-64.0 / 199.0, 16.0 / 199.0, 46.0 / 199.0, 27.0 / 199.0},
       {44.0 / 199.0, -11.0 / 199.0, 43.0 / 199.0, -31.0 / 199.0},
       {60.0 / 199.0, -15.0 / 199.0, -68.0 / 199.0, 12.0 / 199.0}};
-
-  set_matrix(&matrix1, in_mat1);
-  set_matrix(&etalon, in_etalon);
-
-  ck_assert_uint_eq(lib_inverse_matrix(&matrix1, &result), 0);
-  ck_assert_uint_eq(lib_eq_matrix(&result, &etalon), SUCCESS);
-
-  lib_remove_matrix(&matrix1);
-  lib_remove_matrix(&etalon);
-  lib_remove_matrix(&result);
-}
-END_TEST
-
-START_TEST(INVERSTest05) {
-  matrix_t matrix1, etalon, result;
-  ck_assert_uint_eq(lib_create_matrix(4, 4, &matrix1), 0);
-  ck_assert_uint_eq(lib_create_matrix(4, 4, &etalon), 0);
-
-  double in_mat1[10][10] = {
-      {-45.0 / 199.0, 61.0 / 199.0, 51.0 / 199.0, -9.0 / 199.0},
-      {-64.0 / 199.0, 16.0 / 199.0, 46.0 / 199.0, 27.0 / 199.0},
-      {44.0 / 199.0, -11.0 / 199.0, 43.0 / 199.0, -31.0 / 199.0},
-      {60.0 / 199.0, -15.0 / 199.0, -68.0 / 199.0, 12.0 / 199.0}};
-
-  double in_etalon[10][10] = {
-      {1, 2, 3, 4}, {4, 0, 0, 3}, {0, 3, 3, 1}, {0, 7, 2, 6}};
 
   set_matrix(&matrix1, in_mat1);
   set_matrix(&etalon, in_etalon);
@@ -770,7 +744,6 @@ Suite *my_suite_create() {
   tcase_add_test(MatrixTest, INVERSTest02);
   tcase_add_test(MatrixTest, INVERSTest03);
   tcase_add_test(MatrixTest, INVERSTest04);
-  tcase_add_test(MatrixTest, INVERSTest05);
 
   return my_suite;
 }

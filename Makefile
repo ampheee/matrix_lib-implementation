@@ -18,30 +18,24 @@ test: lib_matrix.a
 	$(CC)	matrix_test.c lib_matrix.a -o check.out -lcheck $(LINUX_LIBS)
 	./check.out
 
-
-gcov_report: matrix_test.c lib_matrix.c
+gcov_report: matrix_test.c	lib_matrix.c
 	clear
-	gcc matrix_test.c	lib_matrix.c -o coverage.o -lcheck $(LINUX_LIBS) -fprofile-arcs -ftest-coverage  
+	$(CC) *.c -o coverage.o -lcheck $(LINUX_LIBS) -fprofile-arcs -ftest-coverage
 	./coverage.o
 	lcov -c -d . -o coverage.info
 	genhtml coverage.info -o coverage
+	open coverage/index.html
 
 clean:
 	rm -rf *.o *.out *.a
 	rm -rf *.gcda *.gcno
-	rm -rf coverage coverage.info 
+	rm -rf coverage coverage.info
+
+clang:
+	cp ../materials/linters/.clang-format .
+	clang-format -n *.c
+	clang-format -i *.c
 
 leaks: test
 	gcc -g matrix_test.c lib_matrix.o -o check.out -lcheck $(LINUX_LIBS)
-	valgrind -q --leak-check=full --show-leak-kinds=all --track-origins=yes ./check.out
-
-
-leaks2: test
-	CK_FORK=no leaks --atExit -- ./check.out
-
-lint:
-	cp ./../materials/linters/.clang-format .
-	clang-format -n *.c *.h
-	clang-format -i *.c *.h
-	clang-format -i *.c *.h
-	rm .clang-format
+	valgrind --quiet --leak-check=full --show-leak-kinds=all --track-origins=yes --show-reachable=no --log-file=valgrind-out.txt ./check.out

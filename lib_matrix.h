@@ -35,6 +35,6 @@ void lib_remove_matrix(matrix_t *A);
 
 
 int isIncorrect(matrix_t *Matrix);
-int GetMinor(int xRow, int yColumn, matrix_t *Matrix,  matrix_t *tempMatrix);
-double determinantRecur(matrix_t *A);
+void getMinor(matrix_t *A, matrix_t *minor, int i, int j);
+int determinantRecur(matrix_t *A);
 #endif  // _SRC_MATRIX_H_
